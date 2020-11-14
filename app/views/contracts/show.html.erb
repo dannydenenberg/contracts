@@ -1,0 +1,17 @@
+<p id="notice"><%= notice %></p>
+
+<code><%= @contract.id %></code>
+<p>
+  <strong>Title:</strong>
+  <%= @contract.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= simple_format @contract.content %>
+</p>
+
+
+
+<%= link_to 'Edit', edit_contract_path(@contract) %> |
+<%= link_to 'Back', contracts_path %>
