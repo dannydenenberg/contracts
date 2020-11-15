@@ -1,17 +1,45 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <div class="row">
+    <div class="col-7">
+      <p id="notice"><%= notice %></p>
 
-<code><%= @contract.id %></code>
-<p>
-  <strong>Title:</strong>
-  <%= @contract.title %>
-</p>
+      <div class="">
+        <span class="contract-hash-title">Contract Hash:</span><br/>
+        <code><%= @contract.id %></code>
+      </div>
 
-<p>
-  <strong>Content:</strong>
-  <%= simple_format @contract.content %>
-</p>
+      <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+        <%= link_to "Join", "/join/#{@contract.id}", class: "btn btn-light" %>
+        <%= link_to "Share", "#", class: "btn btn-primary", id: "share-button" %>
+      </div>
 
+      <div class="qr-svg pt-4" style="display: none">
+        <%= @qr_svg.html_safe %>
+      </div>
 
+      <p>
+        <h4>
+          <%= @contract.title %>
+        </h4>
+      </p>
 
-<%= link_to 'Edit', edit_contract_path(@contract) %> |
-<%= link_to 'Back', contracts_path %>
+      <p>
+        <strong>Content:</strong>
+        <%= simple_format @contract.content %>
+      </p>
+
+      <%# <%= link_to 'Edit', edit_contract_path(@contract) %>
+        <%= link_to 'Back', "/me" %>
+      </div>
+      <div class="mt-5 col-5 ">
+        <p>Emails of Parties:</p>
+
+        <ul>
+          <% @contract.parties.each do |party| %>
+            <li><%= party.account.email %></li>
+          <% end %>
+        </ul>
+      </div>
+
+    </div>
+  </div>

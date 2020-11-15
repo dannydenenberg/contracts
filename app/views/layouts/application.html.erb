@@ -13,8 +13,9 @@
     <% unless notice.nil? %>
       <div class="alert alert-primary notice" role="alert"><%= notice %></div>
     <% end %>
-
-    <p class="alert"><%= alert %></p>
+<% unless alert.nil? %>
+    <div class="alert alert-primary" role="alert"><%= alert %></div>
+    <% end %>
 
     <%= yield %>
   </body>

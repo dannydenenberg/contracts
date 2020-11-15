@@ -11,6 +11,44 @@ class ContractsController < ApplicationController
   # GET /contracts/1
   # GET /contracts/1.json
   def show
+    require 'rqrcode'
+
+    qrcode = RQRCode::QRCode.new("http://github.com/")
+
+    # NOTE: showing with default options specified explicitly
+    @qr_svg = qrcode.as_svg(
+      offset: 0,
+      color: '000',
+      shape_rendering: 'crispEdges',
+      module_size: 6,
+      standalone: true
+    )
+
+  end
+
+  # user joins into a contract
+  # GET /join/contract_id
+  def join
+    @contract = Contract.find(params[:contract_id])
+
+    # test if person has already joined this contract.
+    if has_account_already_joined_the_contract current_account.id, @contract.id
+      flash[:notice] = 'Already successfully joined the contract.'
+      redirect_to @contract
+      return
+    end
+
+    @party = Party.new(:account_id => current_account.id, :contract_id => @contract.id)
+
+    respond_to do |format|
+      if @party.save
+        format.html { redirect_to @contract, notice: 'Joined successfully.' }
+        format.json { render :show, status: :created, location: @contract }
+      else
+        format.html { render :show }
+        format.json { render json: @contract.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # GET /contracts/new
@@ -63,6 +101,9 @@ class ContractsController < ApplicationController
   end
 
   private
+    def has_account_already_joined_the_contract(id_of_account, id_of_contract)
+      return Party.where(:account_id => id_of_account, :contract_id => id_of_contract).length > 0
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_contract
       @contract = Contract.find(params[:id])

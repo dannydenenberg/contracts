@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 mt-4">
+      <div class="btn-group btn-group-sm pb-3" role="group" aria-label="Basic example">
+        <%= link_to "New Contract", new_contract_path, class: "btn btn-light" %>
+      </div>
+
+      <h3><%= @greeting %></h3>
+
+      <p>Here are your contracts:</p>
+      <br/>
+      <table class="table">
+        <thead>
+          <th>Title</th>
+          <th>Content</th>
+          <th>Participants (email)</th>
+        </thead>
+        <tbody>
+
+          <% @account.parties.each do |party| %>
+            <tr>
+              <td><%= link_to party.contract.title, contract_path(party.contract) %></td>
+              <td><%= party.contract.content %></td>
+              <td>
+                <% party.contract.parties.each do |p| %>
+                  <%= p.account.email %>,
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
